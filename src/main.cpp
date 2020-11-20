@@ -3,7 +3,7 @@
 #include "ncurses_display.h"
 #include "system.h"
 #include "linux_parser.h"
-
+#include <vector>
 using std::cout;
 
 int main() {
@@ -12,5 +12,8 @@ int main() {
   cout << LinuxParser::OperatingSystem() << std::endl;
   cout << LinuxParser::Kernel() << std::endl;
   LinuxParser::MemoryUtilization(); 
+  std::vector<int> pids;
+  pids = LinuxParser::Pids();
+  cout << "Total Processes: " << pids.size() << std::endl;
   //NCursesDisplay::Display(system);
 }

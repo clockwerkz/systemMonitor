@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <string>
 #include <vector>
-
+#include <filesystem>
 #include "linux_parser.h"
 
 //BEGIN REMOVE --
@@ -10,7 +10,7 @@
 using std::cout;
 //END REMOVE --
 
-
+namespace fs = std::filesystem;
 using std::stof;
 using std::string;
 using std::to_string;
@@ -55,22 +55,18 @@ string LinuxParser::Kernel() {
 // BONUS: Update this to use std::filesystem
 vector<int> LinuxParser::Pids() {
   vector<int> pids;
-  DIR* directory = opendir(kProcDirectory.c_str());
-  struct dirent* file;
-  while ((file = readdir(directory)) != nullptr) {
-    // Is this a directory?
-    if (file->d_type == DT_DIR) {
-      // Is every character of the name a digit?
-      string filename(file->d_name);
-      if (std::all_of(filename.begin(), filename.end(), isdigit)) {
-        int pid = stoi(filename);
+  for (auto & entry : fs::directory_iterator(kProcDirectory)){ 
+    string entryPath{entry.path().filename()};
+    if (fs::is_directory(entry.path())) {
+      if (std::all_of(entryPath.begin(), entryPath.end(), isdigit)) {
+        int pid = stoi(entryPath);
         pids.push_back(pid);
       }
-    }
+    } 
   }
-  closedir(directory);
   return pids;
 }
+
 //Total Physical Memory - (Memory Free + Memory Buffers + Cache Memory) = Result/Total Physical Memory * 100
 // TODO: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() {
