@@ -15,5 +15,6 @@ int main() {
   std::vector<int> pids;
   pids = LinuxParser::Pids();
   cout << "Total Processes: " << pids.size() << std::endl;
+  cout << "Uptime in seconds: " << LinuxParser::UpTime() << std::endl;
   //NCursesDisplay::Display(system);
 }
