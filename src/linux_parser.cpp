@@ -5,6 +5,12 @@
 
 #include "linux_parser.h"
 
+//BEGIN REMOVE --
+#include <iostream>
+using std::cout;
+//END REMOVE --
+
+
 using std::stof;
 using std::string;
 using std::to_string;
@@ -35,13 +41,13 @@ string LinuxParser::OperatingSystem() {
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
-  string os, kernel;
+  string os, versionText, kernel;
   string line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream linestream(line);
-    linestream >> os >> kernel;
+    linestream >> os >> versionText >> kernel;
   }
   return kernel;
 }
@@ -65,9 +71,28 @@ vector<int> LinuxParser::Pids() {
   closedir(directory);
   return pids;
 }
-
+//Total Physical Memory - (Memory Free + Memory Buffers + Cache Memory) = Result/Total Physical Memory * 100
 // TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() {
+  string line; 
+  string key;
+  float value;
+  float memTotal, memFree, buffers, cached, memUtilized;
+  std::ifstream filestream(kProcDirectory + kMeminfoFilename);
+  if (filestream.is_open()) {
+    while(std::getline(filestream, line)) {
+      std::replace(line.begin(), line.end(), ':', ' ');
+      std::istringstream linestream(line);
+      linestream >> key >> value;
+      if (key == "MemFree") memFree = value;
+      if (key == "MemTotal") memTotal = value;
+      if (key == "Buffers") buffers = value;
+      if (key == "Cached") cached = value;}
+  }
+  memUtilized = (memTotal - memFree + buffers + cached) / memTotal * 100;
+  cout << "Memory Utilization: " << memUtilized << std::endl;
+  return memUtilized;
+}
 
 // TODO: Read and return the system uptime
 long LinuxParser::UpTime() { return 0; }
