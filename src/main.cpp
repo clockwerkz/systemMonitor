@@ -14,7 +14,7 @@ int main() {
   LinuxParser::MemoryUtilization(); 
   std::vector<int> pids;
   pids = LinuxParser::Pids();
-  cout << "Total Processes: " << pids.size() << std::endl;
+  cout << "User id of first pid in list (" << pids[0] << "): " << LinuxParser::Uid(pids[0]) << std::endl;
   cout << "Uptime in seconds: " << LinuxParser::UpTime() << std::endl;
   //NCursesDisplay::Display(system);
 }

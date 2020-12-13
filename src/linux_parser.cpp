@@ -135,7 +135,23 @@ string LinuxParser::Ram(int pid[[maybe_unused]]) { return string(); }
 
 // TODO: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Uid(int pid) {
+  std::ifstream pidInfo(kProcDirectory + std::to_string(pid) + "/status");
+  std::string line;
+  std::string uid;
+  if (pidInfo.is_open()) {
+    while(std::getline(pidInfo, line)) {
+      std::istringstream lineStream(line);
+      std::string process;
+      std::string val;
+      lineStream >> process >> val;
+      if (process == "Uid:") {
+        uid = val;
+      }
+    }
+  }
+  return uid;
+}
 
 // TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
