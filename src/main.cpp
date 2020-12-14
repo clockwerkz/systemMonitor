@@ -17,7 +17,11 @@ int main() {
   cout << LinuxParser::OperatingSystem() << std::endl;
   cout << LinuxParser::Kernel() << std::endl;
   long totalJiffies = LinuxParser::Jiffies();
-  cout << "Number of jiffies for the system: " << std::to_string(totalJiffies) << std::endl;
+  cout << "Total system jiffies: " << std::to_string(totalJiffies) << std::endl;
+  float activeJiffies = ((float)LinuxParser::ActiveJiffies() / (float)totalJiffies) * 100;
+  float idleJiffies = ((float)LinuxParser::IdleJiffies() / (float)totalJiffies) * 100;
+  cout << "Pct of active jiffies: " << activeJiffies << std::endl;
+  cout << "Pct of idle jiffies: " << idleJiffies<< std::endl;
   LinuxParser::MemoryUtilization(); 
   std::vector<int> pids;
   pids = LinuxParser::Pids();

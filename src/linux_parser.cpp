@@ -105,31 +105,58 @@ long LinuxParser::UpTime() {
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { 
-  long totalJiffies;
+  std::ifstream file(kProcDirectory + kStatFilename);
+  if (file.is_open()) {
+    string line;
+    if (std::getline(file, line)) {
+      std::istringstream linestream(line);
+      string cpu, normal, nice, system, idle, iowait;
+      linestream >> cpu >> normal >> nice >> system >> idle >> iowait;
+      if (cpu == "cpu") {
+        return (stol(normal) + stol(nice) + stol(system) + stol(idle) + stol(iowait));
+      }
+    }
+  }
+  return 0;
+}
+
+// TODO: Read and return the number of active jiffies for a PID
+// REMOVE: [[maybe_unused]] once you define the function
+long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { 
+  return 0; 
+}
+
+// TODO: Read and return the number of active jiffies for the system
+long LinuxParser::ActiveJiffies() { 
+  std::ifstream file(kProcDirectory + kStatFilename);
+  if (file.is_open()) {
+    string line;
+    if (std::getline(file, line)) {
+      std::istringstream linestream(line);
+      string cpu, normal, nice, system, idle, iowait;
+      linestream >> cpu >> normal >> nice >> system >> idle;
+      return (stol(normal) + stol(nice) + stol(system));
+    }
+  }
+  return 0;
+}
+
+
+// TODO: Read and return the number of idle jiffies for the system
+long LinuxParser::IdleJiffies() { 
   std::ifstream file(kProcDirectory + kStatFilename);
   if (file.is_open()) {
     string line;
     while (std::getline(file, line)) {
       std::istringstream linestream(line);
-      string cpu, normal, nice, system, idle;
-      linestream >> cpu >> normal >> nice >> system >> idle;
-      if (cpu == "cpu") {
-        return (stol(normal) + stol(nice) + stol(system) + stol(idle));
-      }
+      string cpu, normal, nice, system, idle, iowait;
+      linestream >> cpu >> normal >> nice >> system >> idle >>iowait;
+      return (stol(idle) + stol(iowait));
+      
     }
   }
-  return totalJiffies;
+  return 0;
 }
-
-// TODO: Read and return the number of active jiffies for a PID
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
-
-// TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
-
-// TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
 
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { return {}; }
