@@ -22,6 +22,8 @@ int main() {
   float idleJiffies = ((float)LinuxParser::IdleJiffies() / (float)totalJiffies) * 100;
   cout << "Pct of active jiffies: " << activeJiffies << std::endl;
   cout << "Pct of idle jiffies: " << idleJiffies<< std::endl;
+  cout << "Total number of processes: " << LinuxParser::TotalProcesses() << std::endl;
+  cout << "Total number of running processes: " << LinuxParser::RunningProcesses() << std::endl; 
   LinuxParser::MemoryUtilization(); 
   std::vector<int> pids;
   pids = LinuxParser::Pids();
