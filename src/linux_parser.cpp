@@ -127,7 +127,16 @@ int LinuxParser::RunningProcesses() { return 0; }
 
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Command(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Command(int pid) { 
+  std::ifstream pidInfo(kProcDirectory + std::to_string(pid) + kCmdlineFilename);
+  std::string line;
+  if (pidInfo.is_open()) {
+    while(std::getline(pidInfo, line)) {
+      return line;
+    }
+  }
+  return line; 
+}
 
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
@@ -155,7 +164,26 @@ string LinuxParser::Uid(int pid) {
 
 // TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::User(int uid) { 
+  std::ifstream userLookup(kPasswordPath);
+  std::string line;
+  std::string user;
+  if (userLookup.is_open()) {
+    while (std::getline(userLookup, line)) {
+      std::replace(line.begin(), line.end(), ':', ' ');
+      std::istringstream lineStream(line);
+      std::string userName;
+      int id;
+      char spacer;
+      lineStream >> userName >> spacer >> id;
+      if (id == uid) {
+        user = userName;
+        return user;
+      }
+    }
+  }  
+  return user; 
+}
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
