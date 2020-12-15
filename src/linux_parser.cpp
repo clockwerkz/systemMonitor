@@ -86,7 +86,6 @@ float LinuxParser::MemoryUtilization() {
       if (key == "Cached") cached = value;}
   }
   memUtilized = (memTotal - memFree + buffers + cached) / memTotal * 100;
-  cout << "Memory Utilization: " << memUtilized << std::endl;
   return memUtilized;
 }
 
