@@ -41,9 +41,10 @@ int main() {
   cout << "Individual PID" << std::endl;
   cout << "--------------" << std::endl;
   cout << "User of random pid (" << uid <<") in list (" << pids[index] << "): " << userId << std::endl;
-  cout << "Active jiffies of selected pid:\n";
+  cout << "Active jiffies of selected pid: ";
   cout << LinuxParser::ActiveJiffies(pids[index]) << std::endl;
   cout << "uptime for selected pid: " << LinuxParser::UpTime(pids[index]) << std::endl;
+  cout << "Memory usage for selected pid: " << LinuxParser::Ram(pids[index]) << std::endl;
   cout << "Command line: " << LinuxParser::Command(pids[index]) << std::endl;
   cout << std::endl;
   //NCursesDisplay::Display(system);

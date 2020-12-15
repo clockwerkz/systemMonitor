@@ -178,6 +178,8 @@ long LinuxParser::IdleJiffies() {
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
+
+
 // TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() { 
   std::ifstream file(kProcDirectory + kStatFilename);
@@ -227,7 +229,22 @@ string LinuxParser::Command(int pid) {
 
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Ram(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Ram(int pid) { 
+  std::ifstream pidInfo(kProcDirectory + std::to_string(pid) + "/status");
+  std::string line;
+  std::string memoryUsage;
+  if (pidInfo.is_open()) {
+    while(std::getline(pidInfo, line)) {
+      std::istringstream lineStream(line);
+      std::string process, val;
+      lineStream >> process >> val;
+      if (process == "VmSize:") {
+        return val;
+      }
+    }
+  }
+  return string();
+}
 
 
 
