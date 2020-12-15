@@ -41,12 +41,10 @@ int main() {
   cout << "Individual PID" << std::endl;
   cout << "--------------" << std::endl;
   cout << "User of random pid (" << uid <<") in list (" << pids[index] << "): " << userId << std::endl;
+  cout << "Active jiffies of selected pid:\n";
+  cout << LinuxParser::ActiveJiffies(pids[index]) << std::endl;
+  cout << "uptime for selected pid: " << LinuxParser::UpTime(pids[index]) << std::endl;
   cout << "Command line: " << LinuxParser::Command(pids[index]) << std::endl;
   cout << std::endl;
-  cout << "Format Time" << std::endl;
-  cout << "-----------" << std::endl;
-  cout << "Time format test for 22:30:45- " << Format::ElapsedTime(81045) << std::endl;
-  cout << "Time format test for 05:09:30- " << Format::ElapsedTime(18570) << std::endl;
-  cout << "Time format test for 00:00:30- " << Format::ElapsedTime(30) << std::endl;
   //NCursesDisplay::Display(system);
 }
